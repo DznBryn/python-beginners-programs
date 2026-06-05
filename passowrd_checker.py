@@ -1,4 +1,4 @@
-print("""Password Strength Checker
+print(input("""Password Strength Checker
 1. Check a password
 2. Test sample passwords
-3. Exit""")
+3. Exit"""))
