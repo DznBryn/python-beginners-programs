@@ -27,99 +27,121 @@ contacts = {
 }
 
 
-
-
-from random import choice
-
-
-print(int(input("""
-      Contact Book App
-      1. Add a contact
-      2. Search contact
-      3. Update contact
-      4. Delete contact
-      5. View all contacts
-      6. Exit
-                
-      """)))
-
-choice = input("Enter your choice: ")
-
 def add_contact(contacts, name, phone, email, city):
-   pass
+    if name in contacts:
+        print(f"A contact named '{name}' already exists. Use update instead.")
+        return False
+
+    contacts[name] = {
+        "phone": phone,
+        "email": email,
+        "city": city
+    }
+    return True
+
+
 def search_contact(contacts, search_term):
-    pass
+    search_term_lower = search_term.lower()
+    results = []
+    for name, info in contacts.items():
+        if search_term_lower in name.lower() or search_term_lower in info["phone"].lower():
+            results.append((name, info))
+    return results
+
+
 def update_contact(contacts, name, field, new_value):
-    pass
+    if name not in contacts:
+        print(f"Contact '{name}' not found.")
+        return False
+
+    if field not in ["phone", "email", "city"]:
+        print("Field must be 'phone', 'email', or 'city'.")
+        return False
+
+    contacts[name][field] = new_value
+    return True
+
+
 def delete_contact(contacts, name):
-    pass
+    if name not in contacts:
+        print(f"Contact '{name}' not found.")
+        return False
+
+    del contacts[name]
+    return True
+
+
 def view_all_contacts(contacts):
-    pass
+    if not contacts:
+        print("No contacts available.")
+        return
 
-contacts = []
+    for name, info in contacts.items():
+        print(f"Name: {name}")
+        print(f"  Phone: {info['phone']}")
+        print(f"  Email: {info['email']}")
+        print(f"  City: {info['city']}")
+        print("-")
 
-if choice == "1":
 
-    name = input("Enter contact name: ")
-    phone = input("Enter contact phone: ")
-    email = input("Enter contact email: ")
-    city = input("Enter contact city: ")
-    add_contact(contacts, name, phone, email, city)
+def print_menu():
+    print("\nContact Book App")
+    print("1. Add a contact")
+    print("2. Search contact")
+    print("3. Update contact")
+    print("4. Delete contact")
+    print("5. View all contacts")
+    print("6. Exit")
 
-    print(f"Contact '{name}' added successfully!")
 
-elif choice == "2":
-    
+while True:
+    print_menu()
+    choice_input = input("Enter your choice: ").strip()
 
-    search_term = input("Enter name or phone to search: ")
-    results = search_contact(contacts, search_term)
-    if results:
-        print("Search results:")
-        for contacts in results:
-            print(contacts)
+    if choice_input == "1":
+        name = input("Enter contact name: ").strip()
+        phone = input("Enter contact phone: ").strip()
+        email = input("Enter contact email: ").strip()
+        city = input("Enter contact city: ").strip()
+        if add_contact(contacts, name, phone, email, city):
+            print(f"Contact '{name}' added successfully!")
+
+    elif choice_input == "2":
+        search_term = input("Enter name or phone to search: ").strip()
+        results = search_contact(contacts, search_term)
+        if results:
+            print("Search results:")
+            for name, info in results:
+                print(f"Name: {name}")
+                print(f"  Phone: {info['phone']}")
+                print(f"  Email: {info['email']}")
+                print(f"  City: {info['city']}")
+                print("-")
+        else:
+            print("No contacts found.")
+
+    elif choice_input == "3":
+        name = input("Enter contact name to update: ").strip()
+        field = input("Enter field to update (phone/email/city): ").strip().lower()
+        new_value = input(f"Enter new value for {field}: ").strip()
+        if update_contact(contacts, name, field, new_value):
+            print(f"Contact '{name}' updated successfully!")
+
+    elif choice_input == "4":
+        name = input("Enter contact name to delete: ").strip()
+        if delete_contact(contacts, name):
+            print(f"Contact '{name}' deleted successfully!")
+
+    elif choice_input == "5":
+        print("All contacts:")
+        view_all_contacts(contacts)
+
+    elif choice_input == "6":
+        print("Exiting the app. Goodbye!")
+        break
+
     else:
-        print("No contacts found.")
-
-elif choice == "3":
-    name = input("Enter contact name to update: ")
-    field = input("Enter field to update (phone/email/city): ")
-    new_value = input(f"Enter new value for {field}: ")
-    update_contact(contacts, name, field, new_value)
-    print(f"Contact '{name}' updated successfully!")
-
-elif choice == "4":
-    name = input("Enter contact name to delete: ")
-    delete_contact(contacts, name)
-    print(f"Contact '{name}' deleted successfully!")
-
-elif choice == "5":
-    print("All contacts:")
-    view_all_contacts(contacts)
-
-
+        print("Invalid choice. Please enter a number from 1 to 6.")
 
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if choice == "6":
-    print("Exiting the app. Goodbye!")
-
-    
+       
